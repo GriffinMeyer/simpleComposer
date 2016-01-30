@@ -6,10 +6,122 @@ window.onload = function(){
 var c = document.getElementById("canvas");
 //get context from canvas
 var ctx = c.getContext("2d");
-
+//
+var tempo;
 // Global canvas size vars
-//var globalWidth = window.innerWidth/1.5;
-//var globalHeight = (window.innerHeight/3)*2;
+var globalWidth = window.innerWidth/1.5;
+var globalHeight = (window.innerHeight/3)*2;
+
+//
+function getTempo(){
+	ctx.font="13px Ariel";
+	var y = document.getElementById('slider1').value;
+	var bpm = tempo + "  -" + y;
+	ctx.fillText(bpm,(ctx.canvas.width/6)+40,20);
+
+	var tempoName = document.getElementById('tempo').value;
+	var minRange = document.getElementById('slider1');
+
+	var maxRange = document.getElementById('slider1');
+
+	if(tempoName == "Larghissimo"){
+		tempo = "Larghissimo– very, very slow (24bpm)";
+		minRange.min = 24;
+		maxRange.max = 24;
+	}
+	if(tempoName == "Grave"){
+		tempo = "Grave– very slow (25–45 BPM)";
+		minRange.min = 25;
+		maxRange.max = 45;	
+	}
+	if(tempoName == "Largo"){
+		tempo = "Largo– broadly (40–60 BPM)";
+		minRange.min = 40;
+		maxRange.max = 60;
+	}
+	if(tempoName == "Lento"){
+		tempo = "Lento– slowly (45–60 BPM)";
+		minRange.min = 45;
+		maxRange.max = 60;
+	}
+	if(tempoName == "Larghetto"){
+		tempo = "Larghetto– rather broadly (60–66 BPM)";
+		minRange.min = 60;
+		maxRange.max = 66;
+	}
+	if(tempoName == "Adagio"){
+		tempo = "Adagio– slow and stately (literally, at ease) (66–76 BPM)";
+		minRange.min = 66;
+		maxRange.max = 76;
+	}
+	if(tempoName == "Adagietto"){
+		tempo = "Adagietto– slower than andante (72–76 BPM)";
+		minRange.min = 72;
+		maxRange.max = 76;
+	}
+	if(tempoName == "Andante"){
+		tempo = "Andante– at a walking pace (76–108 BPM)";
+		minRange.min = 76;
+		maxRange.max = 108;
+	}
+	if(tempoName == "Andantino"){
+		tempo = "Andantino – slightly faster than Andante(80–108 BPM)";
+		minRange.min = 80;
+		maxRange.max = 108;
+	}
+	if(tempoName == "Marcia moderato"){
+		tempo = "Marcia moderato – moderately, in the manner of a march (83–85 BPM)";
+		minRange.min = 83;
+		maxRange.max = 85;
+	}
+	if(tempoName == "Andante moderato"){
+		tempo = "Andante moderato – between andante and moderato  (92–112 BPM)";
+		minRange.min = 92;
+		maxRange.max = 112;
+	}
+	if(tempoName == "Moderato"){
+		tempo = "Moderato – moderately (108–120 BPM)";
+		minRange.min = 108;
+		maxRange.max = 120;
+	}
+	if(tempoName == "Allegretto"){
+		tempo = "Moderato – moderately (108–120 BPM)";
+		minRange.min = 112;
+		maxRange.max = 120;
+	}
+	if(tempoName == "Allegro moderato"){
+		tempo = "Moderato – moderately (108–120 BPM)";
+		minRange.min = 116;
+		maxRange.max = 120;
+	}
+	if(tempoName == "Vivace"){
+		tempo = "Moderato – moderately (108–120 BPM)";
+		minRange.min = 168;
+		maxRange.max = 176;
+	}	
+	if(tempoName == "Vivacissimo"){
+		tempo = "Moderato – moderately (108–120 BPM)";
+		minRange.min = 172;
+		maxRange.max = 176;
+	}
+	if(tempoName == "Allegrissimo or Allegro vivace"){
+		tempo = "Allegrissimo or Allegro vivace – very fast (172–176 BPM)";
+		minRange.min = 172;
+		maxRange.max = 176;
+	}
+	if(tempoName == "Presto"){
+		tempo = "Presto – very, very fast (168–200 BPM)</option>";
+		minRange.min = 168;
+		maxRange.max = 200;
+	}
+	if(tempoName == "Prestissimo"){
+		tempo = "Prestissimo – even faster than Presto (200 BPM and over)";
+		minRange.min = 200;
+		maxRange.max = 300;
+	}
+	
+	
+}
 
 //Draw staffs
 function drawStaffs(){
@@ -35,22 +147,34 @@ function drawPallet(){
 	ctx.stroke();
 }
 
+// Get user input and use it to draw the title on the sheet.
+function drawTitle(){
+	ctx.font="20px Georgia";
+	var titleInput = document.getElementById('titleInput').value;
+	var textWidth = ctx.measureText(titleInput).width;
+	ctx.fillText(titleInput,(globalWidth/2)-(textWidth/2),30);
+}
+
 // Draw function, encases all of the draw calls.
 // Will be called repeatedly
 function draw(){
 	// Update canvas window size vars to be a 
 	// percentage of the browser window.
-	//globalWidth = window.innerWidth/1.5;
-	//globalHeight = (window.innerHeight/3)*2;
+	globalWidth = window.innerWidth/1.5;
+	globalHeight = (window.innerHeight/3)*2;
 	// !!! Probably needs to be adjusted !!!
 	//Setting canvas width and height
-	//ctx.canvas.width = globalWidth;
-	//ctx.canvas.height = globalHeight;
+	ctx.canvas.width = globalWidth;
+	ctx.canvas.height = globalHeight;
 
 	// Draw the blank sheet
 	drawStaffs();
 	// Draw the notes pallet
 	drawPallet();
+	// Draw sheet title
+	drawTitle();
+	//
+	getTempo();
 
 }
 // Collision detect the note selection
@@ -62,6 +186,8 @@ function noteSelect(){
 	ctx.stroke();
 
 }
+
+
 
 function drawNote(x,y){
 	ctx.beginPath();
