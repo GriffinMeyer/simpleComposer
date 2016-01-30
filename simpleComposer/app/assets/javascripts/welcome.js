@@ -1,4 +1,4 @@
-
+//main
 function main(c, ctx){
 draw(c, ctx);
 }
@@ -7,7 +7,21 @@ function clear(ctx){
 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
-
+function drawBlankSheet(ctx){
+	ctx.beginPath();
+	var y = 60;
+	var count = 0;
+	var num = 0
+	for(num = 0; num< 10;num++){
+		for(count = 0;count <5; count++){
+		ctx.moveTo(ctx.canvas.width/6+10,y);
+		ctx.lineTo(760,y);
+		ctx.stroke();
+		y+=8;
+	}
+	y+=40
+	}
+}
 
 function square(x,y, width, height, color){
 	this.x = x;
@@ -38,9 +52,14 @@ ctx.fillStyle="#000000";
 
 function draw(c, ctx){
 c.addEventListener("mousedown", getPosition, false);
-ctx.canvas.width  = window.innerWidth/2;
+ctx.canvas.width  = window.innerWidth/1.5;
 ctx.canvas.height = (window.innerHeight/3)*2;
 clear(ctx);
+ctx.font="20px Georgia";
+var x = document.getElementById('userInput').value;
+var textWidth = ctx.measureText(x).width
+ctx.fillText(x,(ctx.canvas.width/2)-(textWidth/2),30);
+drawBlankSheet(ctx);
 ctx.beginPath();
 ctx.moveTo((ctx.canvas.width)/6,0);
 ctx.lineTo(ctx.canvas.width/6, ctx.canvas.height);
