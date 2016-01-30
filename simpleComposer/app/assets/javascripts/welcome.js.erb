@@ -1,0 +1,87 @@
+
+// Wait until the page is loaded
+// to start the javascript calls
+window.onload = function(){
+//get canvas from html
+var c = document.getElementById("canvas");
+//get context from canvas
+var ctx = c.getContext("2d");
+
+// Global canvas size vars
+//var globalWidth = window.innerWidth/1.5;
+//var globalHeight = (window.innerHeight/3)*2;
+
+//Draw staffs
+function drawStaffs(){
+	ctx.beginPath();
+	var offset = 60;
+	for(var num = 0; num < 10; num++){
+		for(var count = 0; count < 5; count++){
+			ctx.moveTo(ctx.canvas.width/6+10, offset);
+			ctx.lineTo(760, offset);
+			ctx.stroke();
+			offset += 8;
+		}
+		offset += 40;
+	}
+}
+
+//Draw the note pallet
+function drawPallet(){
+	//Draw the seperation bar
+	ctx.beginPath();
+	ctx.moveTo((ctx.canvas.width)/6,0);
+	ctx.lineTo(ctx.canvas.width/6, ctx.canvas.height);
+	ctx.stroke();
+}
+
+// Draw function, encases all of the draw calls.
+// Will be called repeatedly
+function draw(){
+	// Update canvas window size vars to be a 
+	// percentage of the browser window.
+	//globalWidth = window.innerWidth/1.5;
+	//globalHeight = (window.innerHeight/3)*2;
+	// !!! Probably needs to be adjusted !!!
+	//Setting canvas width and height
+	//ctx.canvas.width = globalWidth;
+	//ctx.canvas.height = globalHeight;
+
+	// Draw the blank sheet
+	drawStaffs();
+	// Draw the notes pallet
+	drawPallet();
+
+}
+// Collision detect the note selection
+function noteSelect(){
+	//attempt to draw a note
+	ctx.beginPath();
+	ctx.moveTo(10,10);
+	ctx.lineTo(10,20);
+	ctx.stroke();
+
+}
+
+function drawNote(x,y){
+	ctx.beginPath();
+	ctx.moveTo(x,y);
+	ctx.lineTo(x,y+10);
+	ctx.stroke();
+
+	ctx.save();
+    ctx.beginPath();
+    ctx.ellipse((x/2)+2, y+10, 3, 2, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+}
+
+//main loop, called every 50ms
+setInterval(function(){
+	draw();
+	drawNote(10,30);
+	
+}, 50);	
+
+
+}

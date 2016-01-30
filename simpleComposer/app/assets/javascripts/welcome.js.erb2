@@ -1,4 +1,13 @@
+window.onload = function(){
+	alert("1");
 //main
+var mousePos = 
+{
+	x: 0,
+	y: 0
+
+};
+
 function main(c, ctx){
 draw(c, ctx);
 }
@@ -51,6 +60,9 @@ ctx.fillStyle="#000000";
 
 
 function draw(c, ctx){
+
+if(color=="red"){document.getElementById("myCanvas").style.cursor = "url(<%= asset_path('cursor_red.png') %>) 20 20, crosshair";}
+if(color=="black"){document.getElementById("myCanvas").style.cursor = "url(<%= asset_path('cursor.png') %>) 10 10, crosshair";}
 c.addEventListener("mousedown", getPosition, false);
 ctx.canvas.width  = window.innerWidth/1.5;
 ctx.canvas.height = (window.innerHeight/3)*2;
@@ -87,7 +99,7 @@ function getPosition(e){
 	var ctx = c.getContext("2d");
 	x -= c.offsetLeft;
 	y -= c.offsetTop;
-	if(x < ctx.canvas.width/6 && y > 100){
+	if(x > 100){
 		color = "red";
 	}
 	if(x < ctx.canvas.width/6 && y < 100){
@@ -96,7 +108,6 @@ function getPosition(e){
 	if(x > ctx.canvas.width/6){
 	squares.push(new square(x,y,10,10, color))
 }
-
 }
 
 function rect(x,y,w,h){
@@ -106,12 +117,28 @@ function rect(x,y,w,h){
 	ctx.fill();
 }
 
+function drawCursor(ctx){
+	if(color == "red"){
+		ctx.fillStyle="#FF0000";
+	}
+	if(color == "black"){
+		ctx.fillStyle="#000000";
+	}
+	ctx.beginPath();
+	ctx.rect(mousePos.x,mousePos.y,10,10);
+	ctx.closePath();
+	ctx.fill();
+	ctx.fillStyle = "#000000" ;
+}
 
 
-window.onload = function(){
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
+c.addEventListener('mousemove', function(e){
+	mousePos.x = e.offsetX || e.layerX;
+	mousePos.y = e.offsetY || e.layerY;
+});
 setInterval(function(){
 	draw(c, ctx);
-}, 150);
+}, 50);
 }
