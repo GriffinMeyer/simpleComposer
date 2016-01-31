@@ -9,6 +9,8 @@ var ctx = c.getContext("2d");
 //
 var timeSigA;
 var timeSigB;
+//global var for note placement
+var currNote = "quarter";
 
 var placedNotes = new Array();
 
@@ -69,19 +71,27 @@ c.addEventListener('mousemove', function(e){
 });
 
 //Onclick check
-c.addEventListener("mousedown", placeNote, false);
+c.addEventListener("mousedown", checkClickLocation, false);
+
+//check click location
+function checkClickLocation(e){
+	if(mousePos.x < 20){
+		buttonCheck();
+	}else{
+		placeNote(e);
+	}
+}
 
 // Note object
 function note (type, x, y){
 	this.type = type;
 	this.x = x;
 	this.y = y;
-
 }
 
 function placeNote(e){
 	console.log("placedNote");
-	placedNotes.push(new note("quarter", mousePos.x, mousePos.y));
+	placedNotes.push(new note(currNote, mousePos.x, mousePos.y));
 }
 
 function note(noteType, x, y){
@@ -91,8 +101,20 @@ function note(noteType, x, y){
 }
 
 function drawNote(noteType, x, y){
-	if (noteType == "quarter"){
+	if(noteType == "eight"){
+		draw8Note(Math.round(x/14)*14,Math.round(y/4)*4);
+	}
+	if(noteType == "quarter"){
 		drawQuarterNote(Math.round(x/14)*14,Math.round(y/4)*4);
+	}
+	if(noteType == "dot"){
+		drawDotNote(Math.round(x/14)*14,Math.round(y/4)*4);
+	}
+	if(noteType == "half"){
+		drawHalfNote(Math.round(x/14)*14,Math.round(y/4)*4);
+	}
+	if(noteType == "whole"){
+		drawWholeNote(Math.round(x/14)*14,Math.round(y/4)*4);
 	}
 }
 
@@ -104,15 +126,31 @@ function drawPlacedNotes(){
 }
 
 function drawCursorNote(){
+	if(currNote == "eight"){
+		drawNote("eight",mousePos.x,mousePos.y);
+	}
+	if(currNote == "quarter"){
+		drawNote("quarter",mousePos.x,mousePos.y);
+	}
+	if(currNote == "dot"){
+		drawNote("dot",mousePos.x,mousePos.y);
+	}
+	if(currNote == "half"){
+		drawNote("half",mousePos.x,mousePos.y);
+	}
+	if(currNote == "whole"){
+		drawNote("whole",mousePos.x,mousePos.y);
+	}
 
+	
 }
 
 // Get tempo from html input
 function getTempo(){
-	ctx.font="13px Ariel";
+	ctx.font="12px Ariel";
 	var y = document.getElementById('slider1').value;
 	var bpm = tempo + "  -" + y;
-	ctx.fillText(bpm,(ctx.canvas.width/6)+40.5,20.5);
+	ctx.fillText(bpm,(ctx.canvas.width/6)+25.5,50.5);
 
 	var tempoName = document.getElementById('tempo').value;
 	var minRange = document.getElementById('slider1');
@@ -189,6 +227,11 @@ function getTempo(){
 		minRange.min = 116;
 		maxRange.max = 120;
 	}
+	if(tempoName == "Allegro"){
+		tempo = "Allegro – fast, quickly, and bright (120–168 BPM)";
+		minRange.min = 120;
+		maxRange.max = 168;
+		}
 	if(tempoName == "Vivace"){
 		tempo = "Moderato – moderately (108–120 BPM)";
 		minRange.min = 168;
@@ -222,6 +265,7 @@ function getTempo(){
 function drawStaffs(){
 	
 	var offset = 60.5;
+	//Draw Horizontal Lines
 	for(var num = 0; num < 10; num++){
 		for(var count = 0; count < 5; count++){
 			ctx.beginPath();
@@ -233,9 +277,56 @@ function drawStaffs(){
 		}
 		offset += 40;
 	}
+
+	//Draw Vertical Lines
+	offset = 60.5;
+	for(var staff = 0; staff < 5; staff++){
+		//left
+		ctx.beginPath();
+		ctx.moveTo(ctx.canvas.width/6+10, offset);
+		ctx.lineTo(ctx.canvas.width/6+10, offset+112);
+		ctx.stroke();
+		//right
+		ctx.beginPath();
+		ctx.moveTo(760, offset);
+		ctx.lineTo(760, offset+112);
+		ctx.stroke();
+		offset += 160;
+	}
+	/*
+	//first
+	ctx.beginPath();
+	ctx.moveTo(ctx.canvas.width/6+10, 60.5);
+	ctx.lineTo(ctx.canvas.width/6+10, 172.5);
+	ctx.stroke();
+	//second
+	ctx.beginPath();
+	ctx.moveTo(760, 60.5);
+	ctx.lineTo(760, 172.5);
+	ctx.stroke();*/
+
+
 }
 
+
+
 function buttonCheck(){
+//check for eigth note
+if(mousePos.y < 40){
+	currNote = "eight";
+}
+if(mousePos.y > 40 && mousePos.y < 70){
+	currNote = "quarter";
+}
+if(mousePos.y > 70 && mousePos.y < 100){
+	currNote = "dot";
+}
+if(mousePos.y > 100 && mousePos.y <130){
+	currNote = "half";
+}
+if(mousePos.y > 130 && mousePos.y < 160){
+	currNote = "whole";
+}
 
 }
 
@@ -261,8 +352,20 @@ function drawTitle(){
 	ctx.font="20px Georgia";
 	var titleInput = document.getElementById('titleInput').value;
 	var textWidth = ctx.measureText(titleInput).width;
-	ctx.fillText(titleInput,(globalWidth/2)-(textWidth/2),30);
+	ctx.fillText(titleInput,(globalWidth/2)-(textWidth/2)-13,30);
 }
+
+function drawBPMnote(x,y){
+	ctx.beginPath();
+	ctx.moveTo(x,y);
+	ctx.lineTo(x,y+10);
+	ctx.stroke();
+
+	ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(x-3, y+10, 3, 2, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();}
 
 // Draw function, encases all of the draw calls.
 // Will be called repeatedly
@@ -287,6 +390,9 @@ function draw(){
 	// Draw time signature
 	getTimeSig();
 	//
+	drawBPMnote((ctx.canvas.width/6)+20.5,40.5);
+
+	drawCursorNote();
 	drawPlacedNotes();
 
 }
@@ -387,7 +493,6 @@ function drawDotNote(x,y){
 //main loop, called every 50ms
 setInterval(function(){
 	draw();
-	drawNote("quarter",mousePos.x,mousePos.y);
 }, 50);	
 
 
