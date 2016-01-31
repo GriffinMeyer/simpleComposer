@@ -14,8 +14,8 @@ var placedNotes = new Array();
 
 var tempo;
 // Global canvas size vars
-// var globalWidth = window.innerWidth/1.5;
-// var globalHeight = (window.innerHeight/3)*2;
+ var globalWidth = window.innerWidth/1.5;
+ var globalHeight = (window.innerHeight/3)*2;
 // Global mouse position
 
 function getTimeSig(){
@@ -92,7 +92,7 @@ function note(noteType, x, y){
 
 function drawNote(noteType, x, y){
 	if (noteType == "quarter"){
-		drawDotNote(Math.round(x/14)*14,Math.round(y/4)*4);
+		drawQuarterNote(Math.round(x/14)*14,Math.round(y/4)*4);
 	}
 }
 
@@ -235,13 +235,25 @@ function drawStaffs(){
 	}
 }
 
+function buttonCheck(){
+
+}
+
 //Draw the note pallet
 function drawPallet(){
 	//Draw the seperation bar
 	ctx.beginPath();
-	ctx.moveTo((ctx.canvas.width)/6,0);
-	ctx.lineTo(ctx.canvas.width/6, ctx.canvas.height);
+	ctx.moveTo(20.5,0);
+	ctx.lineTo(20.5, ctx.canvas.height);
 	ctx.stroke();
+	// Draw Note Buttons
+	draw8Note(12,10);
+	drawQuarterNote(12,40);
+	drawDotNote(12,70);
+	drawHalfNote(12,100);
+	drawWholeNote(12,130);
+	
+
 }
 
 // Get user input and use it to draw the title on the sheet.
@@ -249,7 +261,7 @@ function drawTitle(){
 	ctx.font="20px Georgia";
 	var titleInput = document.getElementById('titleInput').value;
 	var textWidth = ctx.measureText(titleInput).width;
-	//ctx.fillText(titleInput,(globalWidth/2)-(textWidth/2),30);
+	ctx.fillText(titleInput,(globalWidth/2)-(textWidth/2),30);
 }
 
 // Draw function, encases all of the draw calls.
@@ -290,16 +302,15 @@ function noteSelect(){
 }
 
 
-
-function drawQuarter(x,y){
+function drawQuarterNote(x,y){
 	ctx.beginPath();
 	ctx.moveTo(x,y);
-	ctx.lineTo(x,y+10);
+	ctx.lineTo(x,y+20);
 	ctx.stroke();
 
 	ctx.save();
     ctx.beginPath();
-    ctx.ellipse(x-2, y+10, 3, 2, 0, 0, Math.PI*2);
+    ctx.ellipse(x-5, y+20, 5, 3, 0, 0, Math.PI*2);
     ctx.fill();
     ctx.restore();
 }
@@ -324,7 +335,7 @@ function draw8Note(x,y){
 }
 
 function drawHalfNote(x,y){
-		ctx.beginPath();
+	ctx.beginPath();
 	ctx.moveTo(x,y);
 	ctx.lineTo(x,y+20);
 	ctx.stroke();
@@ -334,9 +345,9 @@ function drawHalfNote(x,y){
     ctx.ellipse(x-5, y+20, 5, 3, 0, 0, Math.PI*2);
     ctx.fill();
 	ctx.beginPath();
-	 ctx.ellipse(x-5, y+20, 3, 2,0, 0, Math.PI*2);
-	 ctx.fillStyle = "white";
-	 ctx.fill();
+	ctx.ellipse(x-5, y+20, 3, 2,0, 0, Math.PI*2);
+	ctx.fillStyle = "white";
+	ctx.fill();
     ctx.restore();
 }
 
@@ -348,6 +359,7 @@ function drawWholeNote(x,y){
     ctx.fill();
 	
 	ctx.beginPath();
+	ctx.save();
 	 ctx.ellipse(x-5, y+20, 3, 2,0, 0, Math.PI*2);
 	 ctx.fillStyle = "white";
 	 ctx.fill();
@@ -376,8 +388,6 @@ function drawDotNote(x,y){
 setInterval(function(){
 	draw();
 	drawNote("quarter",mousePos.x,mousePos.y);
-	draw8Note(10,10);
-	
 }, 50);	
 
 
