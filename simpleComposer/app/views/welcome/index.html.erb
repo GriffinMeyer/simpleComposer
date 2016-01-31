@@ -1,49 +1,61 @@
-<h1>Simple Composer</h1>
+<script>
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+</script>
+<div class="container">
+<div class="row">
+<div class ="col s12">
+	<h1>Simple Composer</h1>
 <p>Welcome to simple composer</p>
-Input Song Name
-<input name="text" id="titleInput" type="text">
-</br>
-Put in tempo marking!
-<form action="action_page.php" >
-  <select name="tempo" id = "tempo">
-    <option value="Larghissimo">Larghissimo– very, very slow(24bpm)</option>
-    <option value="Grave">Grave– very slow (25–45 BPM)</option>
-    <option value="Largo">Largo– broadly (40–60 BPM)</option>
-    <option value="Lento">Lento– slowly (45–60 BPM)</option>
-	<option value="Larghetto">Larghetto– rather broadly (60–66 BPM)</option>
-	<option value="Adagio">Adagio– slow and stately (literally, "at ease") (66–76 BPM)</option>
-	<option value="Adagietto">Adagietto– slower than andante (72–76 BPM)</option>
-	<option value="Andante">Andante– at a walking pace (76–108 BPM)</option>
-	<option value="Andantino">Andantino – slightly faster than Andante(80–108 BPM)</option>
-	<option value="Marcia moderato">Marcia moderato – moderately, in the manner of a march (83–85 BPM)</option>
-	<option value="Andante moderato">Andante moderato – between andante and moderato  (92–112 BPM)</option>
-	<option value="Moderato">Moderato – moderately (108–120 BPM)</option>
-	<option value="Allegretto">Allegretto – moderately fast (112–120 BPM)</option>
-	<option value="Allegro moderato">Allegro moderato – close to but not quite allegro (116–120 BPM)</option>
-	<option value="Allegro">Allegro – fast, quickly, and bright (120–168 BPM) </option>
-	<option value="Vivace">Vivace – lively and fast (168–176 BPM)</option>
-	<option value="Vivacissimo">Vivacissimo – very fast and lively (172–176 BPM)</option>
-	<option value="Allegrissimo or Allegro vivace">Allegrissimo or Allegro vivace – very fast (172–176 BPM)</option>
-	<option value="Presto">Presto – very, very fast (168–200 BPM)</option>
-	<option value="Prestissimo">Prestissimo – even faster than Presto (200 BPM and over)</option>
-  </select>
-</form>
-</br>
-<form action="demo_form.asp">
-	Put in bpm(beat per minute)!
-	<input id= "slider1" type="range" name="quantity" min=document.getElementById('minRange') max = document.getElementById('MaxRange')><br>
+</div>
+
 	
-</form>
-Put in Time Signature!
-<form action="action_page.php" >
-  <select name="tempo" id = "timeSig">
- 
-    <option value="FourFour"> 4/4</option>
-    <option value="ThreeFourth">3/4</option>
-    <option value="TwoFourth">2/4</option>
-  <option value="TwoTwo">2/2</option>
-  <option value="ThreeEighth">3/8</option>
-  </select>
-</form>
-<canvas id="canvas" width = "1000" height = "1000" solid #000000;">
-</canvas>
+      <div class="input-field col s4">
+        <input id="titleInput" type="text" class="validate">
+        <label for="titleInput">Input Song Name</label>
+      </div>
+      <div class="input-field col s4">
+      	<select name="tempo" id = "tempo">
+      		<option value= "" disabled selected>Chose Your Tempo</option>
+      		<option value="Larghissimo">Larghissimo– very, very slow(24bpm)</option>
+    		<option value="Grave">Grave– very slow (25–45 BPM)</option>
+    		<option value="Largo">Largo– broadly (40–60 BPM)</option>
+    		<option value="Lento">Lento– slowly (45–60 BPM)</option>
+			<option value="Larghetto">Larghetto– rather broadly (60–66 BPM)</option>
+			<option value="Adagio">Adagio– slow and stately (literally, "at ease") (66–76 BPM)</option>
+			<option value="Adagietto">Adagietto– slower than andante (72–76 BPM)</option>
+			<option value="Andante">Andante– at a walking pace (76–108 BPM)</option>
+			<option value="Andantino">Andantino – slightly faster than Andante(80–108 BPM)</option>
+			<option value="Marcia moderato">Marcia moderato – moderately, in the manner of a march (83–85 BPM)</option>
+			<option value="Andante moderato">Andante moderato – between andante and moderato  (92–112 BPM)</option>
+			<option value="Moderato">Moderato – moderately (108–120 BPM)</option>
+			<option value="Allegretto">Allegretto – moderately fast (112–120 BPM)</option>
+			<option value="Allegro moderato">Allegro moderato – close to but not quite allegro (116–120 BPM)</option>
+			<option value="Allegro">Allegro – fast, quickly, and bright (120–168 BPM) </option>
+			<option value="Vivace">Vivace – lively and fast (168–176 BPM)</option>
+			<option value="Vivacissimo">Vivacissimo – very fast and lively (172–176 BPM)</option>
+			<option value="Allegrissimo or Allegro vivace">Allegrissimo or Allegro vivace – very fast (172–176 BPM)</option>
+			<option value="Presto">Presto – very, very fast (168–200 BPM)</option>
+			<option value="Prestissimo">Prestissimo – even faster than Presto (200 BPM and over)</option>
+      	</select>
+      </div>
+      <div class="input-field col s4">
+      	<select name ="tempo" id="timeSig">
+      		<option value= "" disabled selected=>Chose Time Signature</option>
+      		<option value="FourFour"> 4/4</option>
+    		<option value="ThreeFourth">3/4</option>
+   			<option value="TwoFourth">2/4</option>
+  			<option value="TwoTwo">2/2</option>
+  			<option value="ThreeEighth">3/8</option>
+      	</select>
+      </div>
+      <div class= "col s12"><form action="#">
+      	<p class="range-field">
+      		<input type="range" id ="slider1" name="quantity" min = "0" max = "10">
+      	</p>
+      </form></div>
+	<div class="col s12">      	<canvas id="canvas" width = "1000" height = "1000" solid #000000;></canvas>
+	</div>
+</div>
+          
