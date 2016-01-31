@@ -7,17 +7,112 @@ var c = document.getElementById("canvas");
 //get context from canvas
 var ctx = c.getContext("2d");
 //
+var timeSigA;
+var timeSigB;
+
+var placedNotes = new Array();
+
 var tempo;
 // Global canvas size vars
-var globalWidth = window.innerWidth/1.5;
-var globalHeight = (window.innerHeight/3)*2;
+// var globalWidth = window.innerWidth/1.5;
+// var globalHeight = (window.innerHeight/3)*2;
+// Global mouse position
 
-//
+function getTimeSig(){
+	ctx.font="21px serif";
+	var sigY = 74;
+	var sigY2 = 91;
+	var timeS = document.getElementById('timeSig').value;
+	
+	if(timeS == "FourFour"){
+		timeSigA = "4";
+		timeSigB = "4";
+	}
+	if(timeS == "ThreeFourth"){
+		timeSigA = "3";
+		timeSigB = "4";
+	}
+	if(timeS == "TwoFourth"){
+		timeSigA = "2";
+		timeSigB = "4";
+	}
+	if(timeS == "TwoTwo"){
+		timeSigA = "2";
+		timeSigB = "2";
+	}
+	if(timeS == "ThreeEigth"){
+		timeSigA = "3";
+		timeSigB = "8";
+	}
+	for(var num = 0; num<10;num++){
+		ctx.fillText(timeSigA,(ctx.canvas.width/6)+20, sigY);
+		ctx.fillText(timeSigB,(ctx.canvas.width/6)+20, sigY2);
+		sigY+=80;
+		sigY2+=80;
+	}
+	
+}
+
+var mousePos = {
+	x: 0,
+	y: 0
+}
+
+function clear(){
+	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+}
+
+//Update position of mouse on mouse movement
+c.addEventListener('mousemove', function(e){
+	mousePos.x = e.offsetX || e.layerX;
+	mousePos.y = e.offsetY || e.layerY;
+});
+
+//Onclick check
+c.addEventListener("mousedown", placeNote, false);
+
+// Note object
+function note (type, x, y){
+	this.type = type;
+	this.x = x;
+	this.y = y;
+
+}
+
+function placeNote(e){
+	console.log("placedNote");
+	placedNotes.push(new note("quarter", mousePos.x, mousePos.y));
+}
+
+function note(noteType, x, y){
+	this.noteType = noteType;
+	this.x = x;
+	this.y = y;
+}
+
+function drawNote(noteType, x, y){
+	if (noteType == "quarter"){
+		drawDotNote(Math.round(x/14)*14,Math.round(y/4)*4);
+	}
+}
+
+function drawPlacedNotes(){
+	for(x in placedNotes){
+		console.log("placed");
+		drawNote(placedNotes[x].noteType, placedNotes[x].x, placedNotes[x].y);
+	}
+}
+
+function drawCursorNote(){
+
+}
+
+// Get tempo from html input
 function getTempo(){
 	ctx.font="13px Ariel";
 	var y = document.getElementById('slider1').value;
 	var bpm = tempo + "  -" + y;
-	ctx.fillText(bpm,(ctx.canvas.width/6)+40,20);
+	ctx.fillText(bpm,(ctx.canvas.width/6)+40.5,20.5);
 
 	var tempoName = document.getElementById('tempo').value;
 	var minRange = document.getElementById('slider1');
@@ -125,12 +220,14 @@ function getTempo(){
 
 //Draw staffs
 function drawStaffs(){
-	ctx.beginPath();
-	var offset = 60;
+	
+	var offset = 60.5;
 	for(var num = 0; num < 10; num++){
 		for(var count = 0; count < 5; count++){
+			ctx.beginPath();
 			ctx.moveTo(ctx.canvas.width/6+10, offset);
 			ctx.lineTo(760, offset);
+			ctx.lineWidth = .5;
 			ctx.stroke();
 			offset += 8;
 		}
@@ -152,7 +249,7 @@ function drawTitle(){
 	ctx.font="20px Georgia";
 	var titleInput = document.getElementById('titleInput').value;
 	var textWidth = ctx.measureText(titleInput).width;
-	ctx.fillText(titleInput,(globalWidth/2)-(textWidth/2),30);
+	//ctx.fillText(titleInput,(globalWidth/2)-(textWidth/2),30);
 }
 
 // Draw function, encases all of the draw calls.
@@ -160,23 +257,28 @@ function drawTitle(){
 function draw(){
 	// Update canvas window size vars to be a 
 	// percentage of the browser window.
-	globalWidth = window.innerWidth/1.5;
-	globalHeight = (window.innerHeight/3)*2;
+	//globalWidth = window.innerWidth/1.5;
+	//globalHeight = (window.innerHeight/3)*2;
 	// !!! Probably needs to be adjusted !!!
 	//Setting canvas width and height
-	ctx.canvas.width = globalWidth;
-	ctx.canvas.height = globalHeight;
-
+	//ctx.canvas.width = globalWidth;
+	//ctx.canvas.height = globalHeight;
+	clear();
 	// Draw the blank sheet
 	drawStaffs();
 	// Draw the notes pallet
 	drawPallet();
 	// Draw sheet title
 	drawTitle();
-	//
+	// Draw tempo on sheet
 	getTempo();
+	// Draw time signature
+	getTimeSig();
+	//
+	drawPlacedNotes();
 
 }
+
 // Collision detect the note selection
 function noteSelect(){
 	//attempt to draw a note
@@ -189,7 +291,7 @@ function noteSelect(){
 
 
 
-function drawNote(x,y){
+function drawQuarter(x,y){
 	ctx.beginPath();
 	ctx.moveTo(x,y);
 	ctx.lineTo(x,y+10);
@@ -197,15 +299,84 @@ function drawNote(x,y){
 
 	ctx.save();
     ctx.beginPath();
-    ctx.ellipse((x/2)+2, y+10, 3, 2, 0, 0, Math.PI*2);
+    ctx.ellipse(x-2, y+10, 3, 2, 0, 0, Math.PI*2);
     ctx.fill();
     ctx.restore();
+}
+
+function draw8Note(x,y){
+	ctx.beginPath();
+	ctx.moveTo(x,y);
+	ctx.lineTo(x+4,y+8);
+	ctx.moveTo(x+4,y+8);
+	ctx.lineTo(x+6,y+6)
+
+	ctx.moveTo(x,y);
+	ctx.lineTo(x,y+20);
+	ctx.stroke();
+	ctx.save();
+
+    ctx.beginPath();
+    ctx.ellipse(x-5, y+20, 5, 3,0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+		x+=15;	
+}
+
+function drawHalfNote(x,y){
+		ctx.beginPath();
+	ctx.moveTo(x,y);
+	ctx.lineTo(x,y+20);
+	ctx.stroke();
+	ctx.save();
+	
+    ctx.beginPath();
+    ctx.ellipse(x-5, y+20, 5, 3, 0, 0, Math.PI*2);
+    ctx.fill();
+	ctx.beginPath();
+	 ctx.ellipse(x-5, y+20, 3, 2,0, 0, Math.PI*2);
+	 ctx.fillStyle = "white";
+	 ctx.fill();
+    ctx.restore();
+}
+
+function drawWholeNote(x,y){
+	ctx.beginPath();
+    
+    ctx.ellipse(x-5, y+20, 7, 4,0, 0, Math.PI*2);
+	
+    ctx.fill();
+	
+	ctx.beginPath();
+	 ctx.ellipse(x-5, y+20, 3, 2,0, 0, Math.PI*2);
+	 ctx.fillStyle = "white";
+	 ctx.fill();
+    ctx.restore();	
+}
+
+function drawDotNote(x,y){
+	ctx.beginPath();
+	ctx.moveTo(x,y);
+	ctx.lineTo(x,y+20);
+	ctx.stroke();
+
+	ctx.save();
+    ctx.beginPath();
+	ctx.fillStyle = "black";
+    ctx.ellipse(x-5, y+20, 5, 3, 0, 0, Math.PI*2);
+    ctx.fill();
+	
+    ctx.beginPath();
+	ctx.ellipse(x+4, y+17, 1, 1, 0, 0, Math.PI*2);
+	ctx.fill(); 
+	ctx.restore();
 }
 
 //main loop, called every 50ms
 setInterval(function(){
 	draw();
-	drawNote(10,30);
+	drawNote("quarter",mousePos.x,mousePos.y);
+	draw8Note(10,10);
 	
 }, 50);	
 
