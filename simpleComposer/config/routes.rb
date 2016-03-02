@@ -7,9 +7,11 @@ Rails.application.routes.draw do
   # root 'welcome#index'
   root 'welcome#index'
   get 'sheet/show'
-  get 'test/' => 'welcome#index'
-  get 'new/' => 'welcome#new'
-
+  get 'test/' => 'welcome#inLookdex'
+  post 'push/' => 'welcome#push'
+  get 'pull/' => 'welcome#pull'
+  get 'testnew/' => 'welcome#testnew'
+  get 'save/' => 'welcome#new'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

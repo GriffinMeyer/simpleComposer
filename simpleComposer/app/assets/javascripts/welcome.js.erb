@@ -2,6 +2,9 @@
 // Wait until the page is loaded
 // to start the javascript calls
 window.onload = function(){
+
+var clip = new Clipboard('.btn');
+console.log(clip);
 //get canvas from html
 var c = document.getElementById("canvas");
 //get context from canvas
@@ -14,19 +17,21 @@ var currNote = "quarter";
 
 var placedNotes = new Array();
 
+var lastEdit = "New";
+
 var tempo;
 // Global canvas size vars
  var globalWidth = window.innerWidth/1.5;
  var globalHeight = (window.innerHeight/3)*2;
 // Global mouse position
-
+	timeSigA = "";
+	timeSigB = "";
 function getTimeSig(){
 	ctx.font="21px serif";
 	var sigY = 74;
 	var sigY2 = 91;
 	var timeS = document.getElementById('timeSig').value;
-	timeSigA = "";
-	timeSigB = "";
+
 	if(timeS == "FourFour"){
 		timeSigA = "4";
 		timeSigB = "4";
@@ -92,6 +97,7 @@ function note (type, x, y){
 
 function placeNote(e){
 	console.log("placedNote");
+	lastEdit = Date();
 	placedNotes.push(new note(currNote, mousePos.x, mousePos.y));
 }
 
@@ -491,10 +497,87 @@ function drawDotNote(x,y){
 	ctx.restore();
 }
 
+function toJson(){
+	console.log(JSON.stringify(placedNotes));
+}
+var jsonObject;
+
+
+function getSheet(){
+		$.ajax({
+            type: "GET", //rest Type
+            dataType: 'json', //mispelled
+            url: "" + document.getElementById('geturl').innerHTML,
+            async: true,
+            contentType: "application/json; charset=utf-8",
+            success: function (msg) {
+            	jsonObject = msg;
+                //console.log(msg);
+                updateSheet();
+                               
+            },
+            error: function(){
+            	console.log("failed");
+            }
+
+ });
+		//updateSheet(); 
+}
+
+
+function updateSheet(){
+
+	if(lastEdit == "New"){
+		placedNotes = JSON.parse(jsonObject.notes);
+		document.getElementById('titleInput').value = jsonObject.name;
+		lastEdit = Date();
+	}
+	if(Date.parse(jsonObject.updated_at) < Date.parse(lastEdit)){
+		console.log("Client is newer than server");
+		var titleInput = document.getElementById('titleInput').value;
+		noteString = JSON.stringify(placedNotes)
+					$.ajax({
+            type: "POST", //rest Type
+            dataType: 'json', //mispelled
+            url: "" + document.getElementById('posturl').innerHTML,
+            async: true,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({name: titleInput, tempo: tempo, notes: noteString, timesiga: timeSigA, timesigb: timeSigB}),
+            success: function (msg) {
+                //console.log(msg)                     
+            },
+            error: function(){
+            	//console.log("failed");
+            }
+        });
+
+	} else if(Date.parse(jsonObject.updated_at) >= Date.parse(lastEdit)){
+		lastEdit = Date();
+		console.log("Client is older than server");
+		placedNotes = JSON.parse(jsonObject.notes);
+	}
+	//placedNotes = jsonObject.notes;
+	//console.log(placedNotes);
+	//console.log(JSON.parse(jsonObject.notes));
+	//placedNotes = JSON.parse(jsonObject.notes);
+
+}
+
+//getSheet();
+
 //main loop, called every 50ms
 setInterval(function(){
 	draw();
-}, 50);	
+	getSheet();
+	
+	//console.log(placedNotes);
+	//console.log(jsonObject.updated_at);
+	//updateSheet();
+	
+	//updateSheet();
+
+	//console.log(new Date(dateString));
+}, 200);
 
 
 }
