@@ -1,5 +1,6 @@
 class CreateSheets < ActiveRecord::Migration
   def change
-    add_column :sheets, :sheet_id, :string
+    create_table :sheets do |t|
     end
   end
+end
