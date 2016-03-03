@@ -66,6 +66,63 @@ var mousePos = {
 	y: 0
 }
 
+	var stopped = false;
+
+	var notes = ['E5','Eb5','E5','Eb5','E5','B4','D5','C5','A4','','','C4','E4','A4','B4','','','E4','A4','B4','C5','','','E4','E5','Eb5','E5','Eb5','E5','B4','D5','C5','A4','','','C4','E4','A4','B4','','','E4','C5','B4','A4'];
+
+	setTimeout(function(){
+ 		start();
+	},100);
+
+	var piano = new Wad({
+    source : 'square', 
+    env : {
+        attack : .01, 
+        decay : .005, 
+        sustain : .3, 
+        hold : .025, 
+        release : .3
+    }, 
+    filter : {
+        type : 'lowpass', 
+        frequency : 1200, 
+        q : 8.5, 
+        env : {
+            attack : .2, 
+            frequency : 600
+        }
+    },
+	vibrato : {
+		shape : 'sine',
+		magnitude: 3,
+		speed :4,
+		attack :0
+	}
+})	
+	function start(){
+		
+		play();
+	}
+
+	function play(){
+	var pnote;
+	var count = 0;
+		if(!stopped){
+			for(var i = 0; i < notes.length; ++i){
+				pnote = notes[i];
+				if(pnote==''){
+					count+=.2;
+				}
+				else{
+				piano.play({wait:count, pitch : pnote });
+				count+=.2;
+				}
+			}
+			
+		}
+	}
+
+
 function clear(){
 	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
@@ -83,9 +140,12 @@ c.addEventListener("mousedown", checkClickLocation, false);
 function checkClickLocation(e){
 	if(mousePos.x < 20){
 		buttonCheck();
+	}else if(mousePos.x > 20 && mousePos.x < 100 && mousePos.y > 50 && mousePos.y < 150){
+		start();
 	}else{
 		placeNote(e);
 	}
+	
 }
 
 // Note object
@@ -108,8 +168,10 @@ if(a.x < b.x){
 function placeNote(e){
 	console.log("placedNote");
 	lastEdit = Date();
+	if(mousePos.x > 168 && mousePos.x < 784){
 	placedNotes.push(new note(currNote, mousePos.x, mousePos.y));
 	placedNotes.sort(compareNote);
+}
 }
 
 function note(noteType, x, y){
@@ -405,6 +467,7 @@ function draw(){
 	drawTitle();
 	// Draw tempo on sheet
 	getTempo();
+	drawPlayButton();
 	// Draw time signature
 	getTimeSig();
 	//
@@ -425,6 +488,15 @@ function noteSelect(){
 
 }
 
+function drawPlayButton(){
+	ctx.beginPath();
+	ctx.moveTo(50,50);
+	ctx.lineTo(100,100);
+	ctx.lineTo(50,150);
+	ctx.lineTo(50,50);
+	ctx.fill();
+
+}
 
 function drawQuarterNote(x,y){
 	ctx.beginPath();
