@@ -3,4 +3,3 @@ class CreateSheets < ActiveRecord::Migration
     add_column :sheets, :sheet_id, :string
     end
   end
-end
