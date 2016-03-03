@@ -74,8 +74,8 @@ var mousePos = {
         attack : .01, 
         decay : .005, 
         sustain : .3, 
-        hold : .025, 
-        release : .3
+        hold : .035, 
+        release : .4
     }, 
     filter : {
         type : 'lowpass', 
@@ -100,53 +100,130 @@ var mousePos = {
 
 	function play(){
 	var pnote;
-	var count = 0;
-	
+	var count =0;
+	var ncount;
 	if(!stopped){
 		var playNotes = placedNotes; 
 			for(var i = 0; i < playNotes.length; ++i){
-				if(playNotes[i].y== 80){
-					pnote = 'C5'
+				if(playNotes[i].noteType == "quarter"){
+					ncount = .2;
+				}
+				if(playNotes[i].noteType == "eight"){
+					ncount = .1;
+				}
+				if(playNotes[i].noteType == "half"){
+					ncount = .4;
+				}
+				if(playNotes[i].noteType == "whole"){
+					ncount = .8;
+				}
+				if(playNotes[i].noteType == "dot"){
+					ncount = .3;
+				}
+				//check if its rest
+				if(playNotes[i].noteType =="rest"){	
+						count+= .2
+				}
+				else{
+				//assign to according notes
+				if(playNotes[i].y== 96){
+					pnote = 'E3'
 					piano.play({wait:count, pitch :pnote});
-					count+=.2
+					count+=ncount;
+				}
+				if(playNotes[i].y== 92){
+					pnote = 'F3'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
+				}
+				if(playNotes[i].y== 88){
+					pnote = 'A3'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
+				}
+				if(playNotes[i].y== 84){
+					pnote = 'B3'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
+				}
+				if(playNotes[i].y== 80){
+					pnote = 'C4'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
 				}
 				if(playNotes[i].y == 76){
-					pnote = 'D5'
+					pnote = 'D4'
 					piano.play({wait:count, pitch :pnote});
-					count+=.2
+					count+=ncount;
 				}
 				if(playNotes[i].y == 72){
-					pnote = 'E5'
+					pnote = 'E4'
 					piano.play({wait:count, pitch :pnote});
-					count+=.2
+					count+=ncount;
 				}
 				if(playNotes[i].y == 68){
-					pnote = 'F5'
+					pnote = 'F4'
 					piano.play({wait:count, pitch :pnote});
-					count+=.2
+					count+=ncount;
 				}
 				if(playNotes[i].y == 64){
-					pnote = 'G5'
+					pnote = 'G4'
 					piano.play({wait:count, pitch :pnote});
-					count+=.2
+					count+=ncount;
 				}
 				if(playNotes[i].y == 60){
-					pnote = 'A5'
+					pnote = 'A4'
 					piano.play({wait:count, pitch :pnote});
-					count+=.2
+					count+=ncount;
 				}
 				if(playNotes[i].y == 56){
-					pnote = 'B5'
+					pnote = 'B4'
 					piano.play({wait:count, pitch :pnote});
-					count+=.2
+					count+=ncount;
 				}
 				if(playNotes[i].y == 52){
+					pnote = 'C5'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
+				}
+				if(playNotes[i].y == 48){
+					pnote = 'D5'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
+				}
+				if(playNotes[i].y == 44){
+					pnote = 'E5'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
+				}
+				if(playNotes[i].y == 40){
+					pnote = 'F5'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
+				}
+				if(playNotes[i].y == 36){
+					pnote = 'G5'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
+				}
+				if(playNotes[i].y == 32){
+					pnote = 'A5'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
+				}
+				if(playNotes[i].y == 28){
+					pnote = 'B5'
+					piano.play({wait:count, pitch :pnote});
+					count+=ncount;
+				}
+				if(playNotes[i].y == 24){
 					pnote = 'C6'
 					piano.play({wait:count, pitch :pnote});
-					count+=.2
+					count+=ncount+.1;
 				}
 				else{				
-					count+=.2
+					count+=.1
+				}
 				}
 		}
 	
