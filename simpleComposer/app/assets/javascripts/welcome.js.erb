@@ -72,8 +72,8 @@ function clear(){
 
 //Update position of mouse on mouse movement
 c.addEventListener('mousemove', function(e){
-	mousePos.x = e.offsetX || e.layerX;
-	mousePos.y = e.offsetY || e.layerY;
+	mousePos.x = Math.round(e.offsetX/14)*14 || e.layerX;
+	mousePos.y = Math.round(e.offsetY/4)*4 || e.layerY;
 });
 
 //Onclick check
@@ -120,19 +120,19 @@ function note(noteType, x, y){
 
 function drawNote(noteType, x, y){
 	if(noteType == "eight"){
-		draw8Note(Math.round(x/14)*14,Math.round(y/4)*4);
+		draw8Note(x,y);
 	}
 	if(noteType == "quarter"){
-		drawQuarterNote(Math.round(x/14)*14,Math.round(y/4)*4);
+		drawQuarterNote(x,y);
 	}
 	if(noteType == "dot"){
-		drawDotNote(Math.round(x/14)*14,Math.round(y/4)*4);
+		drawDotNote(x,y);
 	}
 	if(noteType == "half"){
-		drawHalfNote(Math.round(x/14)*14,Math.round(y/4)*4);
+		drawHalfNote(x,y);
 	}
 	if(noteType == "whole"){
-		drawWholeNote(Math.round(x/14)*14,Math.round(y/4)*4);
+		drawWholeNote(x,y);
 	}
 }
 
