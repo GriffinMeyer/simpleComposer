@@ -67,10 +67,7 @@ var mousePos = {
 }
 
 	var stopped = false;
-
 	var notes = ['E5','Eb5','E5','Eb5','E5','B4','D5','C5','A4','','','C4','E4','A4','B4','','','E4','A4','B4','C5','','','E4','E5','Eb5','E5','Eb5','E5','B4','D5','C5','A4','','','C4','E4','A4','B4','','','E4','C5','B4','A4'];
-
-
 	var piano = new Wad({
     source : 'square', 
     env : {
@@ -101,26 +98,9 @@ var mousePos = {
 		play();
 	}
 
-	/*nction play(){
-	var pnote;
-	var count = 0;
-		if(!stopped){
-			for(var i = 0; i < notes.length; ++i){
-				pnote = notes[i];
-				if(pnote==''){
-					count+=.2;
-				}
-				else{
-				piano.play({wait:count, pitch : pnote });
-				count+=.2;
-				}
-			}
-			
-		}
-	}*/
 	function play(){
 	var pnote;
-	var count =0;
+	var count = 0;
 	
 	if(!stopped){
 		var playNotes = placedNotes; 
@@ -193,8 +173,11 @@ function checkClickLocation(e){
 		buttonCheck();
 	}else if(mousePos.x > 20 && mousePos.x < 100 && mousePos.y > 50 && mousePos.y < 150){
 		start();
-	}else{
-		placeNote(e);
+	}else if(mousePos.x > 20 && mousePos.x < 100 && mousePos.y > 160 && mousePos.y < 300){
+		lastEdit = Date();
+		placedNotes.pop();
+		}else{
+			placeNote(e);
 	}
 	
 }
@@ -231,6 +214,19 @@ function note(noteType, x, y){
 	this.y = y;
 }
 
+function drawUndo(){
+	ctx.beginPath();
+	ctx.moveTo(100,200);
+	ctx.lineTo(75,200);
+	ctx.lineTo(75,170);
+	ctx.lineTo(50,215);
+	ctx.lineTo(75,260);
+	ctx.lineTo(75,230);
+	ctx.lineTo(100,230);
+	ctx.lineTo(100,200);
+	ctx.fill();
+}
+
 function drawNote(noteType, x, y){
 	if(noteType == "eight"){
 		draw8Note(x,y);
@@ -246,6 +242,9 @@ function drawNote(noteType, x, y){
 	}
 	if(noteType == "whole"){
 		drawWholeNote(x,y);
+	}
+	if(noteType == "rest"){
+		drawRestNote(x,y);
 	}
 }
 
@@ -271,6 +270,9 @@ function drawCursorNote(){
 	}
 	if(currNote == "whole"){
 		drawNote("whole",mousePos.x,mousePos.y);
+	}
+	if(currNote == "rest"){
+		drawNote("rest", mousePos.x,mousePos.y);
 	}
 
 	
@@ -458,6 +460,8 @@ if(mousePos.y > 100 && mousePos.y <130){
 if(mousePos.y > 130 && mousePos.y < 160){
 	currNote = "whole";
 }
+if(mousePos.y > 160 && mousePos.y < 190)
+	currNote=  "rest";
 
 }
 
@@ -474,6 +478,7 @@ function drawPallet(){
 	drawDotNote(12,70);
 	drawHalfNote(12,100);
 	drawWholeNote(12,130);
+	drawRestNote(8,160)
 	
 
 }
@@ -519,6 +524,8 @@ function draw(){
 	// Draw tempo on sheet
 	getTempo();
 	drawPlayButton();
+	drawUndo();
+
 	// Draw time signature
 	getTimeSig();
 	//
@@ -629,6 +636,16 @@ function drawDotNote(x,y){
 	ctx.ellipse(x+4, y+17, 1, 1, 0, 0, Math.PI*2);
 	ctx.fill(); 
 	ctx.restore();
+}
+
+function drawRestNote(x,y){
+	ctx.beginPath();
+	ctx.moveTo(x,y);
+	ctx.lineTo(x+8,y+13);
+	ctx.lineTo(x-8,y+13);
+	ctx.lineTo(x,y);
+	ctx.fill();
+
 }
 
 function toJson(){
