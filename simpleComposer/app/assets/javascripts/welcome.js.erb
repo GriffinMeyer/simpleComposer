@@ -70,9 +70,6 @@ var mousePos = {
 
 	var notes = ['E5','Eb5','E5','Eb5','E5','B4','D5','C5','A4','','','C4','E4','A4','B4','','','E4','A4','B4','C5','','','E4','E5','Eb5','E5','Eb5','E5','B4','D5','C5','A4','','','C4','E4','A4','B4','','','E4','C5','B4','A4'];
 
-	setTimeout(function(){
- 		start();
-	},100);
 
 	var piano = new Wad({
     source : 'square', 
@@ -104,7 +101,7 @@ var mousePos = {
 		play();
 	}
 
-	function play(){
+	/*nction play(){
 	var pnote;
 	var count = 0;
 		if(!stopped){
@@ -120,6 +117,60 @@ var mousePos = {
 			}
 			
 		}
+	}*/
+	function play(){
+	var pnote;
+	var count =0;
+	
+	if(!stopped){
+		var playNotes = placedNotes; 
+			for(var i = 0; i < playNotes.length; ++i){
+				if(playNotes[i].y== 80){
+					pnote = 'C5'
+					piano.play({wait:count, pitch :pnote});
+					count+=.2
+				}
+				if(playNotes[i].y == 76){
+					pnote = 'D5'
+					piano.play({wait:count, pitch :pnote});
+					count+=.2
+				}
+				if(playNotes[i].y == 72){
+					pnote = 'E5'
+					piano.play({wait:count, pitch :pnote});
+					count+=.2
+				}
+				if(playNotes[i].y == 68){
+					pnote = 'F5'
+					piano.play({wait:count, pitch :pnote});
+					count+=.2
+				}
+				if(playNotes[i].y == 64){
+					pnote = 'G5'
+					piano.play({wait:count, pitch :pnote});
+					count+=.2
+				}
+				if(playNotes[i].y == 60){
+					pnote = 'A5'
+					piano.play({wait:count, pitch :pnote});
+					count+=.2
+				}
+				if(playNotes[i].y == 56){
+					pnote = 'B5'
+					piano.play({wait:count, pitch :pnote});
+					count+=.2
+				}
+				if(playNotes[i].y == 52){
+					pnote = 'C6'
+					piano.play({wait:count, pitch :pnote});
+					count+=.2
+				}
+				else{				
+					count+=.2
+				}
+		}
+	
+	}
 	}
 
 
