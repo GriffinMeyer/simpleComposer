@@ -95,10 +95,21 @@ function note (type, x, y){
 	this.y = y;
 }
 
+function compareNote(a,b){
+if(a.x < b.x){
+	return -1;
+}else if(a.x > b.x){
+	return 1;
+}else if(a.x = b.x){
+	return 0;
+}
+}
+
 function placeNote(e){
 	console.log("placedNote");
 	lastEdit = Date();
 	placedNotes.push(new note(currNote, mousePos.x, mousePos.y));
+	placedNotes.sort(compareNote);
 }
 
 function note(noteType, x, y){
@@ -523,6 +534,8 @@ function getSheet(){
  });
 		//updateSheet(); 
 }
+
+
 
 
 function updateSheet(){
