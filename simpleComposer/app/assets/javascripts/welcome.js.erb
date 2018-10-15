@@ -327,7 +327,7 @@ function drawNote(noteType, x, y){
 
 function drawPlacedNotes(){
 	for(x in placedNotes){
-		console.log("placed");
+		//console.log("placed");
 		drawNote(placedNotes[x].noteType, placedNotes[x].x, placedNotes[x].y);
 	}
 }
@@ -781,7 +781,7 @@ function updateSheet(){
             }
         });
 
-	} else if(Date.parse(jsonObject.updated_at) >= Date.parse(lastEdit)){
+	} else if(Date.parse(jsonObject.updated_at) > Date.parse(lastEdit)){
 		lastEdit = Date();
 		console.log("Client is older than server");
 		placedNotes = JSON.parse(jsonObject.notes);
@@ -798,7 +798,7 @@ function updateSheet(){
 //main loop, called every 50ms
 setInterval(function(){
 	draw();
-	getSheet();
+	
 	
 	//console.log(placedNotes);
 	//console.log(jsonObject.updated_at);
@@ -807,7 +807,10 @@ setInterval(function(){
 	//updateSheet();
 
 	//console.log(new Date(dateString));
-}, 200);
+}, 100);
 
+setInterval(function(){
+getSheet();
+},300);
 
 }

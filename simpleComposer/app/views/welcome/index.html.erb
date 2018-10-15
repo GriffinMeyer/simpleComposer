@@ -69,7 +69,6 @@
 <div class="row">
 <div class ="col s12">
 	<h1>Simple Composer</h1>
-  <%=@updated.updated_at%>
 <p>Welcome to simple composer</p>
 </div>    
       <div class="input-field col s4">
@@ -130,8 +129,8 @@
         document.getElementById("savebutton").value = window.location.href;
       </script>
 
-      <div id="posturl"><%=push_url(:sheetid => @sheetId)%></div>
-      <div id="geturl"><%=pull_url(:sheetid => @sheetId)%></div>
+      <div id="posturl" hidden><%=push_url(:sheetid => @sheetId)%></div>
+      <div id="geturl" hidden><%=pull_url(:sheetid => @sheetId)%></div>
 
 	<div class="col s12">      
   	<canvas id="canvas" width = "1000" height = "1000" solid #000000;></canvas>
